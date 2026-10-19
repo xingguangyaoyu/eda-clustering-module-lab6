@@ -1,0 +1,176 @@
+1
+00:00:00,300 --> 00:00:05,408
+This is step three of the clustering course: spectral bisection.
+
+2
+00:00:05,408 --> 00:00:11,308
+We start with a graph, give every node a score, and turn that score into a cut.
+
+3
+00:00:11,308 --> 00:00:15,508
+Three steps, one tiny graph, no hand-waving.
+
+4
+00:00:16,358 --> 00:00:23,410
+Here is the problem. Five nodes, six weighted edges, and we want two clusters.
+
+5
+00:00:23,410 --> 00:00:30,054
+Two rules. Keep the cut small, and keep the two sides similar in size.
+
+6
+00:00:30,054 --> 00:00:34,730
+A small cut alone is trivial: just isolate one node.
+
+7
+00:00:34,730 --> 00:00:37,922
+That is why the balance rule exists.
+
+8
+00:00:38,772 --> 00:00:47,528
+Look at the weights. Inside A, B and C the edges are five, four and one, so they are tightly bound.
+
+9
+00:00:47,528 --> 00:00:51,052
+D and E are joined by five as well.
+
+10
+00:00:51,052 --> 00:00:56,232
+Between the two groups there is only a weak bridge: two, and one.
+
+11
+00:00:56,232 --> 00:01:05,232
+So the answer is almost visible. A, B, C on one side, D and E on the other, cut equals three.
+
+12
+00:01:06,082 --> 00:01:09,558
+Step one: build the Laplacian.
+
+13
+00:01:09,558 --> 00:01:17,282
+The diagonal holds each node's weighted degree. Every edge puts minus its weight off the diagonal.
+
+14
+00:01:17,282 --> 00:01:21,382
+Every row sums to zero, and that is your check.
+
+15
+00:01:21,382 --> 00:01:26,758
+It is the same graph, rewritten so that linear algebra can work with it.
+
+16
+00:01:27,608 --> 00:01:37,852
+Why this matrix? Because x transpose L x equals the sum over edges of weight times the squared difference of the endpoint values.
+
+17
+00:01:37,852 --> 00:01:44,520
+In words: if two strongly connected nodes get very different values, the cost is high.
+
+18
+00:01:44,520 --> 00:01:49,244
+The matrix measures disagreement, weighted by importance.
+
+19
+00:01:49,244 --> 00:01:54,812
+So the eigenvector that minimises this cost is the one that keeps clusters together.
+
+20
+00:01:55,662 --> 00:02:00,050
+Step two: take eigenvectors of the Laplacian.
+
+21
+00:02:00,050 --> 00:02:07,006
+The smallest one is flat. Every node gets the same value, so it says nothing.
+
+22
+00:02:07,006 --> 00:02:13,170
+The second smallest is the Fiedler vector, and it is the smoothest non-flat assignment.
+
+23
+00:02:13,170 --> 00:02:21,042
+Here it gives E and D negative, and C, B, A positive. The sign is already a suggestion.
+
+24
+00:02:21,892 --> 00:02:25,056
+Step three begins by sorting.
+
+25
+00:02:25,056 --> 00:02:32,612
+E, then D, then C, then B, then A. The graph collapses to one line.
+
+26
+00:02:32,612 --> 00:02:37,844
+Any cut between two neighbours is a candidate, so there are four candidates.
+
+27
+00:02:38,694 --> 00:02:42,122
+So try every balanced prefix.
+
+28
+00:02:42,122 --> 00:02:45,622
+k equals one: cut six.
+
+29
+00:02:45,622 --> 00:02:48,882
+k equals two: cut three.
+
+30
+00:02:48,882 --> 00:02:52,310
+k equals three: cut five.
+
+31
+00:02:52,310 --> 00:02:55,738
+k equals four: cut six.
+
+32
+00:02:55,738 --> 00:03:00,922
+Keep the smallest inside the window, and the choice is k equals two.
+
+33
+00:03:01,772 --> 00:03:05,680
+Notice that the middle of the order is not the answer.
+
+34
+00:03:05,680 --> 00:03:09,828
+k equals three scores five, not three.
+
+35
+00:03:09,828 --> 00:03:16,160
+The middle is a guess based on counting nodes, and counting knows nothing about edge weights.
+
+36
+00:03:16,160 --> 00:03:20,624
+Scores propose. The sweep decides.
+
+37
+00:03:21,474 --> 00:03:26,774
+The result: A, B, C against D and E, cut three.
+
+38
+00:03:26,774 --> 00:03:32,770
+C D is two, C E is one, so the two heavy edges never get cut.
+
+39
+00:03:32,770 --> 00:03:39,730
+This is the same answer that greedy and label propagation find, but it appears without merging anything.
+
+40
+00:03:40,580 --> 00:03:42,808
+Three traps.
+
+41
+00:03:42,808 --> 00:03:47,772
+The eigenvector can flip sign; the partition is unchanged.
+
+42
+00:03:47,772 --> 00:03:53,624
+A disconnected graph makes lambda two zero, so check components first.
+
+43
+00:03:53,624 --> 00:03:58,588
+And ties in the scores need a stable sort, or the cut can wobble.
+
+44
+00:03:58,588 --> 00:04:07,276
+Now open the lab, run the sweep yourself, and compare with this table. Next module: Kernighan Lin refinement.
+
