@@ -33,12 +33,11 @@
   }
   .meta {
     display: flex; flex-wrap: wrap; gap: 8px 18px;
-    margin: 14px 0 34px; color: var(--muted); font-size: 14px;
+    margin: 14px 0 8px; color: var(--muted); font-size: 14px;
   }
   .meta b { color: var(--ink); font-weight: 600; }
+  .intro { margin: 26px 0 0; color: var(--muted); max-width: 760px; }
   h2 { font-size: 22px; margin: 40px 0 12px; }
-  ul.changes { margin: 0; padding-left: 20px; }
-  ul.changes li { margin: 6px 0; }
   .grid {
     display: grid; gap: 16px;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -47,11 +46,6 @@
   figure a { display: block; }
   figure img { width: 100%; display: block; }
   figcaption { padding: 8px 12px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--line); }
-  .note {
-    margin-top: 34px; padding: 14px 18px; border: 1px solid var(--line);
-    border-left: 4px solid var(--teal); border-radius: 8px; background: var(--soft);
-    font-size: 14px; color: var(--muted);
-  }
   footer { margin-top: 46px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 13px; color: var(--muted); }
   a { color: var(--teal); }
 </style>
@@ -76,15 +70,11 @@
     <span><b>1080p</b></span>
   </div>
 
-  <h2>Why this version</h2>
-  <ul class="changes">
-    <li>The original clip ran about two and a half minutes with a 326-word script. This one keeps the same
-        example and spends the extra time on the two steps learners usually skip.</li>
-    <li><b>Slide 5</b> explains what the Laplacian actually measures
-        (x<sup>T</sup>Lx = Σ w·(x<sub>u</sub>−x<sub>v</sub>)<sup>2</sup>), instead of only naming it.</li>
-    <li><b>Slide 9</b> shows why the middle of the Fiedler order is <em>not</em> the answer — it scores 5 against the sweep's 3.</li>
-    <li>Subtitles are burned in <em>and</em> shipped as <a href="subs.srt">subs.srt</a>, aligned sentence by sentence.</li>
-  </ul>
+  <p class="intro">
+    The walkthrough follows the five-node starter graph from start to finish: build the Laplacian,
+    take the Fiedler vector, sort the nodes, and sweep every balanced prefix until the cut is three.
+    Subtitles are burned in and also available as <a href="subs.srt">subs.srt</a>.
+  </p>
 
   <h2>Slides</h2>
   <div class="grid">
@@ -101,15 +91,8 @@
     <figure><a href="slides/11.png"><img src="slides/11.png" alt="Traps and next steps"></a><figcaption>11 · Three traps, then your turn</figcaption></figure>
   </div>
 
-  <p class="note">
-    This page is a self-contained preview: the video, the slides and the subtitles are all local files,
-    no external fonts or CDNs. The same material is being prepared as a patch to
-    <code>learn_clustering/module02-03-spectral-bisection</code>; nothing in the course repo has been
-    replaced yet.
-  </p>
-
   <footer>
-    Lab 06 of the Clustering for EDA course · built as a standalone review copy.
+    Lab 06 of the Clustering for EDA course · review build, not yet merged into the course repo.
   </footer>
 
 </div>
