@@ -1,176 +1,196 @@
 1
-00:00:00,300 --> 00:00:05,408
-This is step three of the clustering course: spectral bisection.
+00:00:00,300 --> 00:00:08,144
+This is spectral bisection. Sounds fancy, but it is just three steps on a five-node graph.
 
 2
-00:00:05,408 --> 00:00:11,308
-We start with a graph, give every node a score, and turn that score into a cut.
+00:00:08,144 --> 00:00:12,532
+Give every node a score, sort them, and cut once.
 
 3
-00:00:11,308 --> 00:00:15,508
-Three steps, one tiny graph, no hand-waving.
+00:00:12,532 --> 00:00:14,356
+Let's go.
 
 4
-00:00:16,358 --> 00:00:23,410
-Here is the problem. Five nodes, six weighted edges, and we want two clusters.
+00:00:15,206 --> 00:00:22,066
+Here is the problem. Five nodes, six edges, and every edge has a weight.
 
 5
-00:00:23,410 --> 00:00:30,054
-Two rules. Keep the cut small, and keep the two sides similar in size.
+00:00:22,066 --> 00:00:29,934
+We want two groups. Two rules: do not cut too much weight, and do not let one group get tiny.
 
 6
-00:00:30,054 --> 00:00:34,730
-A small cut alone is trivial: just isolate one node.
+00:00:29,934 --> 00:00:36,606
+Why the second rule? Because the cheap trick is to cut off one node and call it a day.
 
 7
-00:00:34,730 --> 00:00:37,922
-That is why the balance rule exists.
+00:00:37,456 --> 00:00:44,724
+Look at the numbers. A, B and C are tied together with five, four and one.
 
 8
-00:00:38,772 --> 00:00:47,528
-Look at the weights. Inside A, B and C the edges are five, four and one, so they are tightly bound.
+00:00:44,724 --> 00:00:48,224
+D and E are tied with five as well.
 
 9
-00:00:47,528 --> 00:00:51,052
-D and E are joined by five as well.
+00:00:48,224 --> 00:00:53,356
+Between the two groups there is only a thin bridge: two, and one.
 
 10
-00:00:51,052 --> 00:00:56,232
-Between the two groups there is only a weak bridge: two, and one.
+00:00:53,356 --> 00:00:57,172
+So honestly, you can already see the answer.
 
 11
-00:00:56,232 --> 00:01:05,232
-So the answer is almost visible. A, B, C on one side, D and E on the other, cut equals three.
+00:00:58,022 --> 00:01:02,242
+Step one: build a table called the Laplacian.
 
 12
-00:01:06,082 --> 00:01:09,558
-Step one: build the Laplacian.
+00:01:02,242 --> 00:01:09,846
+Diagonal: add up the weights on each node. Everywhere else: minus the weight of that edge.
 
 13
-00:01:09,558 --> 00:01:17,282
-The diagonal holds each node's weighted degree. Every edge puts minus its weight off the diagonal.
+00:01:09,846 --> 00:01:13,658
+Quick check: every row adds up to zero.
 
 14
-00:01:17,282 --> 00:01:21,382
-Every row sums to zero, and that is your check.
+00:01:13,658 --> 00:01:23,306
+But why build a table at all? Because we want one number that says how bad a split is. And this table can give us that number.
 
 15
-00:01:21,382 --> 00:01:26,758
-It is the same graph, rewritten so that linear algebra can work with it.
+00:01:24,156 --> 00:01:32,000
+Here is how it gives us that number. Multiply the table by a vector x: one value per node.
 
 16
-00:01:27,608 --> 00:01:37,852
-Why this matrix? Because x transpose L x equals the sum over edges of weight times the squared difference of the endpoint values.
+00:01:32,000 --> 00:01:41,476
+The answer is a single number. For every edge, take its weight times the squared gap between the two ends, and add them all up.
 
 17
-00:01:37,852 --> 00:01:44,520
-In words: if two strongly connected nodes get very different values, the cost is high.
+00:01:41,476 --> 00:01:50,476
+Big weight with a big gap means a big bill. So this number is small exactly when tightly connected nodes get similar values.
 
 18
-00:01:44,520 --> 00:01:49,244
-The matrix measures disagreement, weighted by importance.
+00:01:51,326 --> 00:01:58,906
+Let's make it concrete. Write a split as plus one on one side, minus one on the other.
 
 19
-00:01:49,244 --> 00:01:54,812
-So the eigenvector that minimises this cost is the one that keeps clusters together.
+00:01:58,906 --> 00:02:05,118
+Then every edge you cut contributes four, and every edge you keep contributes zero.
 
 20
-00:01:55,662 --> 00:02:00,050
-Step two: take eigenvectors of the Laplacian.
+00:02:05,118 --> 00:02:09,122
+So the number is just four times the cut size.
 
 21
-00:02:00,050 --> 00:02:07,006
-The smallest one is flat. Every node gets the same value, so it says nothing.
+00:02:09,122 --> 00:02:17,446
+The good split cuts three, so it costs twelve. The bad seed cuts twelve, so it costs forty-eight.
 
 22
-00:02:07,006 --> 00:02:13,170
-The second smallest is the Fiedler vector, and it is the smoothest non-flat assignment.
+00:02:17,446 --> 00:02:21,286
+One number, and it already ranks the two splits.
 
 23
-00:02:13,170 --> 00:02:21,042
-Here it gives E and D negative, and C, B, A positive. The sign is already a suggestion.
+00:02:22,136 --> 00:02:27,892
+So the real question is: which vector makes this number as small as possible?
 
 24
-00:02:21,892 --> 00:02:25,056
-Step three begins by sorting.
+00:02:27,892 --> 00:02:38,064
+Two catches. All-equal gives zero, but that is not a split. And if the length is free, we can shrink everything to zero.
 
 25
-00:02:25,056 --> 00:02:32,612
-E, then D, then C, then B, then A. The graph collapses to one line.
+00:02:38,064 --> 00:02:43,100
+So we fix the length, forbid the flat vector, and minimise.
 
 26
-00:02:32,612 --> 00:02:37,844
-Any cut between two neighbours is a candidate, so there are four candidates.
+00:02:43,100 --> 00:02:49,504
+That problem has a standard answer: the eigenvector of the second-smallest eigenvalue.
 
 27
-00:02:38,694 --> 00:02:42,122
-So try every balanced prefix.
+00:02:49,504 --> 00:02:57,592
+Eigenvector just means a vector the matrix stretches without turning it. The stretch factor is the eigenvalue.
 
 28
-00:02:42,122 --> 00:02:45,622
-k equals one: cut six.
+00:02:58,442 --> 00:03:06,190
+So step two: take that second-smallest eigenvector. It has a name: the Fiedler vector.
 
 29
-00:02:45,622 --> 00:02:48,882
-k equals two: cut three.
+00:03:06,190 --> 00:03:14,226
+It gives each node a score. Here, E and D come out negative, and C, B, A positive.
 
 30
-00:02:48,882 --> 00:02:52,310
-k equals three: cut five.
+00:03:14,226 --> 00:03:21,134
+It is not exactly plus one and minus one. It is the smooth version of that idea.
 
 31
-00:02:52,310 --> 00:02:55,738
-k equals four: cut six.
+00:03:21,134 --> 00:03:29,726
+But the sign already splits them. And because the values are ordered, we can sort. That is step three.
 
 32
-00:02:55,738 --> 00:03:00,922
-Keep the smallest inside the window, and the choice is k equals two.
+00:03:30,576 --> 00:03:33,884
+Step three: sort by score.
 
 33
-00:03:01,772 --> 00:03:05,680
-Notice that the middle of the order is not the answer.
+00:03:33,884 --> 00:03:40,432
+E, D, C, B, A. The graph is just a line now.
 
 34
-00:03:05,680 --> 00:03:09,828
-k equals three scores five, not three.
+00:03:40,432 --> 00:03:44,032
+Four gaps, so four places you could cut.
 
 35
-00:03:09,828 --> 00:03:16,160
-The middle is a guess based on counting nodes, and counting knows nothing about edge weights.
+00:03:44,882 --> 00:03:47,182
+Try all four.
 
 36
-00:03:16,160 --> 00:03:20,624
-Scores propose. The sweep decides.
+00:03:47,182 --> 00:03:57,186
+Cut after E: six. After D: three. After C: five. After B: six.
 
 37
-00:03:21,474 --> 00:03:26,774
-The result: A, B, C against D and E, cut three.
+00:03:57,186 --> 00:04:01,866
+Keep the cheapest. That is k equals two.
 
 38
-00:03:26,774 --> 00:03:32,770
-C D is two, C E is one, so the two heavy edges never get cut.
+00:04:02,716 --> 00:04:09,000
+Now look at the middle. k equals three costs five, not three.
 
 39
-00:03:32,770 --> 00:03:39,730
-This is the same answer that greedy and label propagation find, but it appears without merging anything.
+00:04:09,000 --> 00:04:12,740
+Counting nodes tells you nothing about weights.
 
 40
-00:03:40,580 --> 00:03:42,808
-Three traps.
+00:04:12,740 --> 00:04:17,584
+That is why we check every cut, instead of eyeballing the middle.
 
 41
-00:03:42,808 --> 00:03:47,772
-The eigenvector can flip sign; the partition is unchanged.
+00:04:17,584 --> 00:04:22,048
+Scores propose. The sweep decides.
 
 42
-00:03:47,772 --> 00:03:53,624
-A disconnected graph makes lambda two zero, so check components first.
+00:04:22,898 --> 00:04:29,278
+So: A, B, C on one side. D and E on the other.
 
 43
-00:03:53,624 --> 00:03:58,588
-And ties in the scores need a stable sort, or the cut can wobble.
+00:04:29,278 --> 00:04:33,450
+The cut is three, and it is only the thin bridge.
 
 44
-00:03:58,588 --> 00:04:07,276
-Now open the lab, run the sweep yourself, and compare with this table. Next module: Kernighan Lin refinement.
+00:04:33,450 --> 00:04:36,786
+Both heavy edges stay inside a group.
+
+45
+00:04:37,636 --> 00:04:40,176
+Three things to watch.
+
+46
+00:04:40,176 --> 00:04:45,716
+The score can flip sign. Same split, don't panic.
+
+47
+00:04:45,716 --> 00:04:51,880
+Disconnected graph? Lambda two is zero, handle it separately.
+
+48
+00:04:51,880 --> 00:04:55,548
+And if two scores tie, sort stably.
+
+49
+00:04:55,548 --> 00:05:00,852
+Now go run it yourself. Next up: Kernighan Lin.
 
