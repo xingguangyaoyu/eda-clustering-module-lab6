@@ -1,196 +1,180 @@
 1
-00:00:00,300 --> 00:00:08,144
-This is spectral bisection. Sounds fancy, but it is just three steps on a five-node graph.
+00:00:00,300 --> 00:00:08,048
+Five points, joined by springs. Some springs are stiff. Some are soft.
 
 2
-00:00:08,144 --> 00:00:12,532
-Give every node a score, sort them, and cut once.
+00:00:08,048 --> 00:00:12,484
+We want two teams, and we want to keep friends together.
 
 3
-00:00:12,532 --> 00:00:14,356
-Let's go.
+00:00:12,484 --> 00:00:14,380
+Here is how.
 
 4
-00:00:15,206 --> 00:00:22,066
-Here is the problem. Five nodes, six edges, and every edge has a weight.
+00:00:15,230 --> 00:00:22,618
+The number on a spring is its stiffness. Five is stiff. One is soft.
 
 5
-00:00:22,066 --> 00:00:29,934
-We want two groups. Two rules: do not cut too much weight, and do not let one group get tiny.
+00:00:22,618 --> 00:00:28,062
+A, B and C are tied by springs of five, four and one.
 
 6
-00:00:29,934 --> 00:00:36,606
-Why the second rule? Because the cheap trick is to cut off one node and call it a day.
+00:00:28,062 --> 00:00:36,150
+D and E are tied by a spring of five. Between the groups there is only a soft spring: two, and one.
 
 7
-00:00:37,456 --> 00:00:44,724
-Look at the numbers. A, B and C are tied together with five, four and one.
+00:00:37,000 --> 00:00:45,324
+Two rules. First: every spring that crosses the line has to be cut, and the cost is its stiffness.
 
 8
-00:00:44,724 --> 00:00:48,224
-D and E are tied with five as well.
+00:00:45,324 --> 00:00:51,152
+So keep the cost small. Second: no team can be tiny.
 
 9
-00:00:48,224 --> 00:00:53,356
-Between the two groups there is only a thin bridge: two, and one.
+00:00:51,152 --> 00:01:03,560
+Why the second rule? Because if cost is all that matters, the cheapest move is to isolate one point. E alone costs six. That is a useless team.
 
 10
-00:00:53,356 --> 00:00:57,172
-So honestly, you can already see the answer.
+00:01:04,410 --> 00:01:11,318
+So here is the trick. Give every point a score. One number each.
 
 11
-00:00:58,022 --> 00:01:02,242
-Step one: build a table called the Laplacian.
+00:01:11,318 --> 00:01:17,674
+Stiff springs should keep their ends close. Soft springs can stretch.
 
 12
-00:01:02,242 --> 00:01:09,846
-Diagonal: add up the weights on each node. Everywhere else: minus the weight of that edge.
+00:01:17,674 --> 00:01:22,642
+We do not pick the scores. The springs decide them.
 
 13
-00:01:09,846 --> 00:01:13,658
-Quick check: every row adds up to zero.
+00:01:23,492 --> 00:01:30,160
+Now treat the scores as positions on a line. Let go, and the points settle.
 
 14
-00:01:13,658 --> 00:01:23,306
-But why build a table at all? Because we want one number that says how bad a split is. And this table can give us that number.
+00:01:30,160 --> 00:01:37,236
+Careful: if nothing pulls them apart, they all sit in the same spot. Useless.
 
 15
-00:01:24,156 --> 00:01:32,000
-Here is how it gives us that number. Multiply the table by a vector x: one value per node.
+00:01:37,236 --> 00:01:42,968
+So we fix the length of the line. Like stretching a rubber band.
 
 16
-00:01:32,000 --> 00:01:41,476
-The answer is a single number. For every edge, take its weight times the squared gap between the two ends, and add them all up.
+00:01:42,968 --> 00:01:52,736
+Now look. A, B and C pull left; D and E pull right. The soft spring between them becomes a wide gap.
 
 17
-00:01:41,476 --> 00:01:50,476
-Big weight with a big gap means a big bill. So this number is small exactly when tightly connected nodes get similar values.
+00:01:53,586 --> 00:02:02,078
+So we cut in the biggest gap. A, B, C on one side. D and E on the other.
 
 18
-00:01:51,326 --> 00:01:58,906
-Let's make it concrete. Write a split as plus one on one side, minus one on the other.
+00:02:02,078 --> 00:02:05,866
+The cost is three: the two weak hands.
 
 19
-00:01:58,906 --> 00:02:05,118
-Then every edge you cut contributes four, and every edge you keep contributes zero.
+00:02:05,866 --> 00:02:09,298
+Both stiff springs stay inside a team.
 
 20
-00:02:05,118 --> 00:02:09,122
-So the number is just four times the cut size.
+00:02:10,148 --> 00:02:17,368
+But wait. A computer cannot let go and see. It has to calculate.
 
 21
-00:02:09,122 --> 00:02:17,446
-The good split cuts three, so it costs twelve. The bad seed cuts twelve, so it costs forty-eight.
+00:02:17,368 --> 00:02:22,068
+So it keeps a ledger: one row and one column per friend.
 
 22
-00:02:17,446 --> 00:02:21,286
-One number, and it already ranks the two splits.
+00:02:22,068 --> 00:02:30,128
+Diagonal: the total stiffness at that point. Off-diagonal: minus the stiffness of that spring.
 
 23
-00:02:22,136 --> 00:02:27,892
-So the real question is: which vector makes this number as small as possible?
+00:02:30,128 --> 00:02:35,360
+Every row adds up to zero. That is how you check the ledger.
 
 24
-00:02:27,892 --> 00:02:38,064
-Two catches. All-equal gives zero, but that is not a split. And if the length is free, we can shrink everything to zero.
+00:02:36,210 --> 00:02:41,054
+The ledger gives one number for any arrangement: the stretch.
 
 25
-00:02:38,064 --> 00:02:43,100
-So we fix the length, forbid the flat vector, and minimise.
+00:02:41,054 --> 00:02:48,490
+For each spring: its stiffness, times the squared gap between its ends. Add them up.
 
 26
-00:02:43,100 --> 00:02:49,504
-That problem has a standard answer: the eigenvector of the second-smallest eigenvalue.
+00:02:48,490 --> 00:02:55,978
+Stiff springs stretched far cost a lot. So the calmest arrangement keeps stiff springs short.
 
 27
-00:02:49,504 --> 00:02:57,592
-Eigenvector just means a vector the matrix stretches without turning it. The stretch factor is the eigenvalue.
+00:02:56,828 --> 00:03:03,856
+Try a real split. Write it as plus one on one side, minus one on the other.
 
 28
-00:02:58,442 --> 00:03:06,190
-So step two: take that second-smallest eigenvector. It has a name: the Fiedler vector.
+00:03:03,856 --> 00:03:11,196
+A cut spring has gap two, so it costs four. An uncut spring costs zero.
 
 29
-00:03:06,190 --> 00:03:14,226
-It gives each node a score. Here, E and D come out negative, and C, B, A positive.
+00:03:11,196 --> 00:03:14,840
+So the stretch is just four times the cut.
 
 30
-00:03:14,226 --> 00:03:21,134
-It is not exactly plus one and minus one. It is the smooth version of that idea.
+00:03:14,840 --> 00:03:21,464
+Good split: three, so twelve. Bad split: twelve, so forty-eight.
 
 31
-00:03:21,134 --> 00:03:29,726
-But the sign already splits them. And because the values are ordered, we can sort. That is step three.
+00:03:22,314 --> 00:03:26,894
+So we want the calmest arrangement: the smallest stretch.
 
 32
-00:03:30,576 --> 00:03:33,884
-Step three: sort by score.
+00:03:26,894 --> 00:03:36,610
+Two catches. All-equal gives zero, but that is not a split. And with a free length, everything shrinks to zero.
 
 33
-00:03:33,884 --> 00:03:40,432
-E, D, C, B, A. The graph is just a line now.
+00:03:36,610 --> 00:03:41,430
+So: fix the length, ban the flat one, minimise.
 
 34
-00:03:40,432 --> 00:03:44,032
-Four gaps, so four places you could cut.
+00:03:41,430 --> 00:03:45,222
+That answer is the second-smallest eigenvector.
 
 35
-00:03:44,882 --> 00:03:47,182
-Try all four.
+00:03:46,072 --> 00:03:52,956
+Now we have the scores. Sort them: E, D, C, B, A.
 
 36
-00:03:47,182 --> 00:03:57,186
-Cut after E: six. After D: three. After C: five. After B: six.
+00:03:52,956 --> 00:04:00,008
+There are four gaps. Try all four: six, three, five, six.
 
 37
-00:03:57,186 --> 00:04:01,866
-Keep the cheapest. That is k equals two.
+00:04:00,008 --> 00:04:04,016
+Keep the cheapest. That is two.
 
 38
-00:04:02,716 --> 00:04:09,000
-Now look at the middle. k equals three costs five, not three.
+00:04:04,866 --> 00:04:09,974
+Notice: the gap nearest the middle costs five, not three.
 
 39
-00:04:09,000 --> 00:04:12,740
-Counting nodes tells you nothing about weights.
+00:04:09,974 --> 00:04:13,882
+Counting points tells you nothing about stiffness.
 
 40
-00:04:12,740 --> 00:04:17,584
-That is why we check every cut, instead of eyeballing the middle.
+00:04:13,882 --> 00:04:20,698
+So we check every gap. Scores propose. The cut decides.
 
 41
-00:04:17,584 --> 00:04:22,048
-Scores propose. The sweep decides.
-
-42
-00:04:22,898 --> 00:04:29,278
-So: A, B, C on one side. D and E on the other.
-
-43
-00:04:29,278 --> 00:04:33,450
-The cut is three, and it is only the thin bridge.
-
-44
-00:04:33,450 --> 00:04:36,786
-Both heavy edges stay inside a group.
-
-45
-00:04:37,636 --> 00:04:40,176
+00:04:21,548 --> 00:04:24,088
 Three things to watch.
 
-46
-00:04:40,176 --> 00:04:45,716
-The score can flip sign. Same split, don't panic.
+42
+00:04:24,088 --> 00:04:28,932
+The scores can flip sign. Same teams.
 
-47
-00:04:45,716 --> 00:04:51,880
-Disconnected graph? Lambda two is zero, handle it separately.
+43
+00:04:28,932 --> 00:04:34,976
+Disconnected graph? The whole method breaks, so check that first.
 
-48
-00:04:51,880 --> 00:04:55,548
+44
+00:04:34,976 --> 00:04:38,644
 And if two scores tie, sort stably.
 
-49
-00:04:55,548 --> 00:05:00,852
-Now go run it yourself. Next up: Kernighan Lin.
+45
+00:04:38,644 --> 00:04:44,116
+Now go try it yourself. Next module: Kernighan Lin.
 
