@@ -107,138 +107,126 @@ Four gaps, so four candidates. Without sorting, you are choosing among sixteen s
 Sorting turns 'which side' into 'how many on the left'.
 
 28
-00:02:53,622 --> 00:02:57,842
-Now the machinery. Two words.
+00:02:53,622 --> 00:02:57,050
+So what do these two actually do here?
 
 29
-00:02:57,842 --> 00:03:03,886
-A vector is just a list of numbers. Here, one number per point.
+00:02:57,050 --> 00:03:05,182
+The eigenvector is the calmest seating. It becomes the scores we sort, and the scores are what we cut between.
 
 30
-00:03:03,886 --> 00:03:09,138
-A matrix is a table that takes a list and mixes it into a new list.
+00:03:05,182 --> 00:03:13,626
+The eigenvalue is the price of that seating. Small means the graph splits easily; large means it does not.
 
 31
-00:03:09,138 --> 00:03:12,042
-That is all the Laplacian is.
+00:03:13,626 --> 00:03:19,434
+Neither is a step you perform. They are what the algorithm hands back.
 
 32
-00:03:12,892 --> 00:03:17,928
-When a matrix multiplies most vectors, the direction turns.
-
-33
-00:03:17,928 --> 00:03:23,444
-A few special vectors do not turn. They only stretch.
-
-34
-00:03:23,444 --> 00:03:29,084
-Those are eigenvectors. How much they stretch is the eigenvalue.
-
-35
-00:03:29,934 --> 00:03:33,242
+00:03:20,284 --> 00:03:23,592
 So here is the ledger for our graph.
 
-36
-00:03:33,242 --> 00:03:41,350
+33
+00:03:23,592 --> 00:03:31,700
 Diagonal: the total stiffness at each point. Off-diagonal: minus the stiffness of that spring.
 
-37
-00:03:41,350 --> 00:03:45,910
+34
+00:03:31,700 --> 00:03:36,260
 Every row sums to zero. That is your check.
 
-38
-00:03:46,760 --> 00:03:51,748
+35
+00:03:37,110 --> 00:03:42,098
 The ledger gives one number for any arrangement: total stretch.
 
-39
-00:03:51,748 --> 00:03:57,720
+36
+00:03:42,098 --> 00:03:48,070
 Each spring contributes its stiffness, times the squared gap between its ends.
 
-40
-00:03:57,720 --> 00:04:04,872
+37
+00:03:48,070 --> 00:03:55,222
 Stiff and far apart is expensive. So the calmest arrangement keeps stiff springs short.
 
-41
-00:04:05,722 --> 00:04:11,142
+38
+00:03:56,072 --> 00:04:01,492
 Try a real split: plus one on one side, minus one on the other.
 
-42
-00:04:11,142 --> 00:04:18,482
+39
+00:04:01,492 --> 00:04:08,832
 A cut spring has gap two, so it costs four. An uncut spring costs zero.
 
-43
-00:04:18,482 --> 00:04:22,414
+40
+00:04:08,832 --> 00:04:12,764
 So total stretch equals four times the cut.
 
-44
-00:04:22,414 --> 00:04:29,134
+41
+00:04:12,764 --> 00:04:19,484
 Good split: three, so twelve. Bad seed: twelve, so forty-eight.
 
-45
-00:04:29,984 --> 00:04:34,012
+42
+00:04:20,334 --> 00:04:24,362
 So find the arrangement with the smallest stretch.
 
-46
-00:04:34,012 --> 00:04:43,728
+43
+00:04:24,362 --> 00:04:34,078
 Two catches. All-equal gives zero, but that is not a split. And with a free length, everything shrinks to zero.
 
-47
-00:04:43,728 --> 00:04:51,240
+44
+00:04:34,078 --> 00:04:41,590
 Fix the length, ban the flat one, minimise. The answer is the second-smallest eigenvector.
 
-48
-00:04:52,090 --> 00:04:58,542
+45
+00:04:42,440 --> 00:04:48,892
 Now sweep. Four gaps: six, three, five, six.
 
-49
-00:04:58,542 --> 00:05:01,206
+46
+00:04:48,892 --> 00:04:51,556
 Keep the cheapest: two.
 
-50
-00:05:02,056 --> 00:05:06,540
+47
+00:04:52,406 --> 00:04:56,890
 The gap nearest the middle costs five, not three.
 
-51
-00:05:06,540 --> 00:05:10,328
+48
+00:04:56,890 --> 00:05:00,678
 Counting points knows nothing about stiffness.
 
-52
-00:05:10,328 --> 00:05:16,256
+49
+00:05:00,678 --> 00:05:06,606
 So we check every gap. The scores propose; the cut decides.
 
-53
-00:05:17,106 --> 00:05:24,830
+50
+00:05:07,456 --> 00:05:15,180
 The answer: A, B, C on one side, D and E on the other. Cost three.
 
-54
-00:05:24,830 --> 00:05:28,262
+51
+00:05:15,180 --> 00:05:18,612
 Both stiff springs stay inside a team.
 
-55
-00:05:29,112 --> 00:05:32,540
+52
+00:05:19,462 --> 00:05:22,890
 Let's put the whole chain in one picture.
 
-56
-00:05:32,540 --> 00:05:37,072
+53
+00:05:22,890 --> 00:05:27,422
 Graph, scores, sorted line, cut, check.
 
-57
-00:05:37,072 --> 00:05:41,032
+54
+00:05:27,422 --> 00:05:31,382
 If you can redraw this from memory, you have got it.
 
-58
-00:05:41,882 --> 00:05:47,590
+55
+00:05:32,232 --> 00:05:37,940
 Three traps. The scores can flip sign; same teams.
 
-59
-00:05:47,590 --> 00:05:52,554
+56
+00:05:37,940 --> 00:05:42,904
 A disconnected graph breaks the method, so check that first.
 
-60
-00:05:52,554 --> 00:05:55,670
+57
+00:05:42,904 --> 00:05:46,020
 And ties need a stable sort.
 
-61
-00:05:55,670 --> 00:06:01,214
+58
+00:05:46,020 --> 00:05:51,564
 Now try the exercises. They only use what we just did.
 
