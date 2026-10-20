@@ -77,12 +77,12 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
   <h1>谱二分</h1>
   <p class="lead">从一个分数到一刀：先搭拉普拉斯矩阵，再取 Fiedler 向量，然后沿排序把每个平衡位置都切一遍，留下最便宜的那刀。</p>
 
-  <video controls preload="metadata" poster="poster.png" playsinline id="video">
-    <source src="video.mp4" type="video/mp4">
-    <track kind="subtitles" src="subs.srt" srclang="en" label="English" default>
+  <video controls preload="metadata" poster="poster-zh.png" playsinline id="video">
+    <source src="video-zh.mp4" type="video/mp4">
+    <track kind="subtitles" src="subs-zh.srt" srclang="zh" label="中文" default>
   </video>
-  <div class="meta"><span>4 分 08 秒视频</span><span>11 页幻灯片</span><span>英文配音 + 字幕</span><span>可交互</span></div>
-  <p class="note">字幕已烧进画面，同名 .srt 也单独提供。</p>
+  <div class="meta"><span>3 分 36 秒视频</span><span>11 页幻灯片</span><span>中文配音 + 字幕</span><span>可交互</span></div>
+  <p class="note">字幕已烧进画面，同名 .srt 也单独提供。英文版（英文幻灯片 + 英文配音）在 <a href="index.html">EN 页面</a>。</p>
 
   <h2>记住这三句</h2>
   <div class="grid3"><div class="card"><h3>L = D − A</h3><p>对角线是每个点的加权度数，每条边在非对角线上放 −w。每行加起来等于 0，用这个自检。</p></div><div class="card"><h3>每个点一个分数</h3><p>Fiedler 向量是第二小特征值对应的特征向量。它的正负已经把两队分好了。</p></div><div class="card"><h3>扫描，别猜</h3><p>按分数排序，把每个平衡位置都试一遍。这里 k=2 得到 cut=3；正中间 k=3 反而是 5。</p></div></div>
@@ -117,7 +117,7 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
 
   <h2>幻灯片</h2>
   <p class="note">点任意一页看大图。</p>
-  <div class="thumbs"><figure><a href="slides/01.png"><img src="slides/01.png" alt="Slide 1"></a><figcaption>01</figcaption></figure><figure><a href="slides/02.png"><img src="slides/02.png" alt="Slide 2"></a><figcaption>02</figcaption></figure><figure><a href="slides/03.png"><img src="slides/03.png" alt="Slide 3"></a><figcaption>03</figcaption></figure><figure><a href="slides/04.png"><img src="slides/04.png" alt="Slide 4"></a><figcaption>04</figcaption></figure><figure><a href="slides/05.png"><img src="slides/05.png" alt="Slide 5"></a><figcaption>05</figcaption></figure><figure><a href="slides/06.png"><img src="slides/06.png" alt="Slide 6"></a><figcaption>06</figcaption></figure><figure><a href="slides/07.png"><img src="slides/07.png" alt="Slide 7"></a><figcaption>07</figcaption></figure><figure><a href="slides/08.png"><img src="slides/08.png" alt="Slide 8"></a><figcaption>08</figcaption></figure><figure><a href="slides/09.png"><img src="slides/09.png" alt="Slide 9"></a><figcaption>09</figcaption></figure><figure><a href="slides/10.png"><img src="slides/10.png" alt="Slide 10"></a><figcaption>10</figcaption></figure><figure><a href="slides/11.png"><img src="slides/11.png" alt="Slide 11"></a><figcaption>11</figcaption></figure></div>
+  <div class="thumbs"><figure><a href="slides-zh/01.png"><img src="slides-zh/01.png" alt="Slide 1"></a><figcaption>01</figcaption></figure><figure><a href="slides-zh/02.png"><img src="slides-zh/02.png" alt="Slide 2"></a><figcaption>02</figcaption></figure><figure><a href="slides-zh/03.png"><img src="slides-zh/03.png" alt="Slide 3"></a><figcaption>03</figcaption></figure><figure><a href="slides-zh/04.png"><img src="slides-zh/04.png" alt="Slide 4"></a><figcaption>04</figcaption></figure><figure><a href="slides-zh/05.png"><img src="slides-zh/05.png" alt="Slide 5"></a><figcaption>05</figcaption></figure><figure><a href="slides-zh/06.png"><img src="slides-zh/06.png" alt="Slide 6"></a><figcaption>06</figcaption></figure><figure><a href="slides-zh/07.png"><img src="slides-zh/07.png" alt="Slide 7"></a><figcaption>07</figcaption></figure><figure><a href="slides-zh/08.png"><img src="slides-zh/08.png" alt="Slide 8"></a><figcaption>08</figcaption></figure><figure><a href="slides-zh/09.png"><img src="slides-zh/09.png" alt="Slide 9"></a><figcaption>09</figcaption></figure><figure><a href="slides-zh/10.png"><img src="slides-zh/10.png" alt="Slide 10"></a><figcaption>10</figcaption></figure><figure><a href="slides-zh/11.png"><img src="slides-zh/11.png" alt="Slide 11"></a><figcaption>11</figcaption></figure></div>
 
   <h2>讲稿</h2>
   <details>
@@ -127,9 +127,9 @@ footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-si
 
   <h2>文件与链接</h2>
   <div class="links">
-    <a href="video.mp4">视频（MP4）</a>
-    <a href="slides.zip">幻灯片（ZIP，11 页 PNG）</a>
-    <a href="subs.srt">字幕（SRT）</a>
+    <a href="video-zh.mp4">视频（MP4）</a>
+    <a href="slides-zh.zip">幻灯片（ZIP，11 页 PNG）</a>
+    <a href="subs-zh.srt">字幕（SRT）</a>
     <a href="https://github.com/yongfu-li/eda-learning/tree/main/courses/learn_clustering/module02-03-spectral-bisection">课程模块（GitHub）</a>
     <a href="https://github.com/yongfu-li/eda-learning/tree/main/platform/tools/spectral-bisection">浏览器实验（课程仓库）</a>
   </div>
